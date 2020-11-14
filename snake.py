@@ -58,11 +58,14 @@ class Snake():
         
         is_game_finished = self.end_game() # after every move, check if snake bit itself or hit the wall
         if is_game_finished == True: # if process/game has finished
-            return self.board, False
+            return -1, False
         else:
-            self.eat_apple() # after every move, check if snake ate apple
+            ate_apple = self.eat_apple() # after every move, check if snake ate apple
             self.redraw_board()# after every move, redraw board
-            return self.board, True
+            if ate_apple:
+                return 1, True
+            else:
+                return 0, True
     
     def random_apple(self):
     
@@ -86,8 +89,10 @@ class Snake():
             self.apple_xy = self.random_apple() # get coordinates of new random apple
             self.score += self.apple_reward # add reward for eaten apple
             self.no_score_count = 0 # resent the movement count
+            return True
         else: # if not, add 1 to the movement count
             self.no_score_count += 1
+            return False
     
     
     def redraw_board(self): 
