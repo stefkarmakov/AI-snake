@@ -23,15 +23,10 @@ class snake():
         self.punishment = punishment
         self.no_score_count = 0 # count the number of moves without finding/eating an apple
         
-    # 0 - continue  ||  1 - left  ||  2 - right  ||  3 - up  ||  4 - down  
+    #  1 - left  ||  2 - right  ||  3 - up  ||  4 - down  
       
     def move(self,key): 
         self.score += self.move_reward # for every move, reward the snake
-        if key == 0:
-            if not(self.turns): # if it's the first movement entry
-                self.turns.append((0,0)) # just don't move
-            else:
-                self.turns.append(self.turns[-1]) # take previous movement and continue with it
         elif key == 1:
             self.turns.append((0,-1))
         elif key == 2:
@@ -108,7 +103,7 @@ def snakeAI(rows, hidden_dense_1, hidden_dense_2):
     input_frame = Input(shape = (rows**2 + 2,)) # reshape the board and apple into 1 vector
     x = Dense(hidden_dense_1, activation = 'relu')(input_frame)
     x = Dense(hidden_dense_2, activation = 'relu')(x)
-    outp = Dense(5, activation = 'softmax')(x) # 5 states for movement
+    outp = Dense(4, activation = 'softmax')(x) # 4 states for movement
     
     snake_model = Model(input_frame, outp)
     # print(snake_model.summary())
