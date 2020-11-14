@@ -1,6 +1,18 @@
 
+import numpy as np
+import random
+import operator
+from enum import Enum
+
+class Directions(Enum):
+    NONE = 0
+    LEFT = 1
+    RIGHT = 2
+    UP = 3
+    DOWN = 4
+
 class snake():
-    def __init__(self, rows, move_reward, apple_reward, punishment):
+    def __init__(self, rows=10, move_reward=1, apple_reward=10, punishment=1):
     
         self.body = []
         self.turns = []
@@ -15,22 +27,28 @@ class snake():
         self.punishment = punishment
         self.no_score_count = 0 # count the number of moves without finding/eating an apple
         
+    
+    def __str__(self):
+        printable = np.copy(self.board)
+        printable[self.apple_xy[0]][self.apple_xy[1]] = 3
+        return str(printable)
+            
     # 0 - continue  ||  1 - left  ||  2 - right  ||  3 - up  ||  4 - down  
       
     def move(self,key): 
         self.score += self.move_reward # for every move, reward the snake
-        if key == 0:
+        if key == Directions.NONE:
             if not(self.turns): # if it's the first movement entry
                 self.turns.append((0,0)) # just don't move
             else:
                 self.turns.append(self.turns[-1]) # take previous movement and continue with it
-        elif key == 1:
+        elif key == Directions.LEFT:
             self.turns.append((0,-1))
-        elif key == 2:
+        elif key == Directions.RIGHT:
             self.turns.append((0,1))
-        elif key == 3:
+        elif key == Directions.UP:
             self.turns.append((-1,0))
-        elif key == 4:
+        elif key == Directions.DOWN:
             self.turns.append((1,0))
         
         for part in range(len(self.body)): # update the body so that each part turns the way it should
@@ -49,8 +67,8 @@ class snake():
     def random_apple(self):
     
         while True: # create apple at a random location
-            apple_x = random.randrange(rows)
-            apple_y = random.randrange(rows)
+            apple_x = random.randrange(len(self.board))
+            apple_y = random.randrange(len(self.board))
             if self.board[apple_x,apple_y] == 1: # check if on that location there is a snake body
                 continue # if yes, continue trying
             else: 
@@ -74,7 +92,7 @@ class snake():
     
     def redraw_board(self): 
         
-        self.board = np.zeros((rows,rows)) # redraw the empty board and then place the new body position
+        self.board = np.zeros((len(self.board),len(self.board))) # redraw the empty board and then place the new body position
         r, c = zip(*self.body)
         self.board[r, c] = np.ones(len(self.body)) # redraw the snake on the board based on the new body positions
         
@@ -85,10 +103,26 @@ class snake():
         if (
             self.body[0] in self.body[1:] or # check if the head has the same coordinates as the rest of the body
             [a>=0 for a in self.body[0]] != [True,True] or # check if snake has hit the top or left wall
-            [b<=rows-1 for b in self.body[0]] != [True,True] or # check if snake has hit the bottom or right wall
-            self.no_score_count >= 2*(rows**2) # if the snake hasn't eaten an apple in these many turns, end game
+            [b<=len(self.board)-1 for b in self.body[0]] != [True,True] or # check if snake has hit the bottom or right wall
+            self.no_score_count >= 2*(len(self.board)**2) # if the snake hasn't eaten an apple in these many turns, end game
             ): 
                 self.score += self.punishment # add punishment
                 is_game_finished = True # 
                 
         return is_game_finished
+
+
+
+
+if __name__ == "__main__":
+    s = snake(rows=3,move_reward=2,apple_reward=10,punishment=1)
+    print(s)
+    while True:
+        key = input("Input: ")
+        if key == "exit":
+            break
+        _,alive = s.move(Directions(int(key)))
+        if not alive:
+            print("Dead!")
+            break
+        print(s)

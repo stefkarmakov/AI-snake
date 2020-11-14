@@ -5,8 +5,9 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Dense, Dropout, Input
 from tensorflow.keras.models import Model
+import logging
 
-
+from snake import snake
 
 def snakeAI(rows, hidden_dense_1, hidden_dense_2):
     input_frame = Input(shape = (rows**2 + 2,)) # reshape the board and apple into 1 vector
@@ -22,6 +23,7 @@ def prep_frame(apple, board): # create function to make NN input from game outpu
     inp = np.concatenate((np.asarray(apple),board.flatten()), axis = 0)
     inp = np.array(inp).reshape(-1,np.shape(inp)[0])
     return inp
+
 
 
 
@@ -53,7 +55,6 @@ prediction.append(snake_model.predict(new_frames[0]))
 in_progress = True
 archive_frames = []
 archive_score = []
-
 while in_progress:
     last_pred = prediction[-1][0] # take array of last predicted probability distribution
     model_move = np.where(last_pred == max(last_pred))[0][0] # find max value idx // [0][0] is to get a value from the array
@@ -78,12 +79,6 @@ if len(archive_frames) > archive_max_size:
 
 
 
-
-
-
-
-    
-    
 
 
 
