@@ -7,7 +7,7 @@ from tensorflow.keras.layers import Dense, Dropout, Input
 from tensorflow.keras.models import Model
 import logging
 
-from snake import snake
+from snake import Snake,Directions
 
 def snakeAI(rows, hidden_dense_1, hidden_dense_2):
     input_frame = Input(shape = (rows**2 + 2,)) # reshape the board and apple into 1 vector
@@ -41,7 +41,7 @@ score_history = [0] # start game with 0 score
 prediction = []
 new_frames = []
 
-sn = snake(rows, move_reward, apple_reward, punishment) # create snake object
+sn = Snake(rows, move_reward, apple_reward, punishment) # create snake object
 apple_history.append(sn.apple_xy) # first apple loc
 board_history.append(sn.board) # first board 
 snake_model = snakeAI(rows, hidden_dense_1, hidden_dense_2) # create NN model
@@ -58,7 +58,7 @@ archive_score = []
 while in_progress:
     last_pred = prediction[-1][0] # take array of last predicted probability distribution
     model_move = np.where(last_pred == max(last_pred))[0][0] # find max value idx // [0][0] is to get a value from the array
-    current_board, in_progress = sn.move(model_move) # apply move and update game
+    current_board, in_progress = sn.move(Directions(model_move)) # apply move and update game
     
     board_history.append(current_board) # add new board
     apple_history.append(sn.apple_xy) # add apple position, whether it has changed or not

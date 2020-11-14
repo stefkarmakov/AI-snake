@@ -11,7 +11,7 @@ class Directions(Enum):
     UP = 3
     DOWN = 4
 
-class snake():
+class Snake():
     def __init__(self, rows=10, move_reward=1, apple_reward=10, punishment=1):
     
         self.body = []
@@ -115,7 +115,7 @@ class snake():
 
 
 if __name__ == "__main__":
-    s = snake(rows=3,move_reward=2,apple_reward=10,punishment=1)
+    s = Snake(rows=3,move_reward=2,apple_reward=10,punishment=1)
     print(s)
     while True:
         key = input("Input: ")
