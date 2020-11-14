@@ -59,7 +59,7 @@ class snake():
         while True: # create apple at a random location
             apple_x = random.randrange(rows)
             apple_y = random.randrange(rows)
-            if self.board[apple_x,apple_y] == 1: # check if on that location there is a snake body
+            if (apple_x,apple_y) in self.body: # check if on that location there is a snake body
                 continue # if yes, continue trying
             else: 
                 break # if no, choose that position
