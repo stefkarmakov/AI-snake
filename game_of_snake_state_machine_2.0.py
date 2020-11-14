@@ -23,17 +23,17 @@ class snake():
         self.punishment = punishment
         self.no_score_count = 0 # count the number of moves without finding/eating an apple
         
-    #  1 - left  ||  2 - right  ||  3 - up  ||  4 - down  
+    #  0 - left  ||  1 - right  ||  2 - up  ||  3 - down  
       
     def move(self,key): 
         self.score += self.move_reward # for every move, reward the snake
-        elif key == 1:
+        if key == 0:
             self.turns.append((0,-1))
-        elif key == 2:
+        elif key == 1:
             self.turns.append((0,1))
-        elif key == 3:
+        elif key == 2:
             self.turns.append((-1,0))
-        elif key == 4:
+        elif key == 3:
             self.turns.append((1,0))
         
         for part in range(len(self.body)): # update the body so that each part turns the way it should
