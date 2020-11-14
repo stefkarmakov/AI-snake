@@ -154,7 +154,7 @@ archive_score = []
 
 while in_progress:
     last_pred = prediction[-1][0] # take array of last predicted probability distribution
-    model_move = np.where(last_pred == max(last_pred))[0][0] # find max value idx // [0][0] is to get a value from the array
+    model_move = np.argmax(last_pred) # find max value idx
     current_board, in_progress = sn.move(model_move) # apply move and update game
     
     board_history.append(current_board) # add new board
